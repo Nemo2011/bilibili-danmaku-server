@@ -13,7 +13,7 @@ def index(request):
     return render(request, "danmaku/index.html")
 
 def danmaku(request, aid, page):
-    if True:#try:
+    try:
         v = video.Video(aid=aid)
         danmakus = asyncio.run(v.get_danmakus(page))
         dm_list = []
@@ -44,10 +44,10 @@ def danmaku(request, aid, page):
             dm_dict["pool"] = dm.pool
             dm_dict["attr"] = dm.attr
             dm_list.append(dm_dict)
-    #except Exception as e:
-    #    return HttpResponse(json.dumps({
-    #        "code": 404, 
-    #        "message": str(e)
-    #    }), "application/json", 404)
-    #else:
+    except Exception as e:
+        return HttpResponse(json.dumps({
+            "code": 404, 
+            "message": str(e)
+        }), "application/json", 404)
+    else:
         return HttpResponse(json.dumps(dm_list), "application/json", 200)
